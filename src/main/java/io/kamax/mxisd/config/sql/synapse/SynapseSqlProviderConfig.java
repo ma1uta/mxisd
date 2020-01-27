@@ -24,8 +24,22 @@ import io.kamax.mxisd.UserIdType;
 import io.kamax.mxisd.backend.sql.synapse.SynapseQueries;
 import io.kamax.mxisd.config.sql.SqlConfig;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SynapseSqlProviderConfig extends SqlConfig {
+
+    private transient final Logger log = LoggerFactory.getLogger(SynapseSqlProviderConfig.class);
+
+    private boolean legacyRoomNames = false;
+
+    public boolean isLegacyRoomNames() {
+        return legacyRoomNames;
+    }
+
+    public void setLegacyRoomNames(boolean legacyRoomNames) {
+        this.legacyRoomNames = legacyRoomNames;
+    }
 
     @Override
     protected String getProviderName() {
@@ -65,4 +79,12 @@ public class SynapseSqlProviderConfig extends SqlConfig {
         printConfig();
     }
 
+    @Override
+    protected void printConfig() {
+        super.printConfig();
+
+        if (isEnabled()) {
+            log.info("Use legacy room name query: {}", isLegacyRoomNames());
+        }
+    }
 }

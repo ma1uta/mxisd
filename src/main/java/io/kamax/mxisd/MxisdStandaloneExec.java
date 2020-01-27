@@ -44,36 +44,52 @@ public class MxisdStandaloneExec {
         try {
             MxisdConfig cfg = null;
             Iterator<String> argsIt = Arrays.asList(args).iterator();
+            boolean dump = false;
             while (argsIt.hasNext()) {
                 String arg = argsIt.next();
-                if (StringUtils.equalsAny(arg, "-h", "--help", "-?", "--usage")) {
-                    System.out.println("Available arguments:" + System.lineSeparator());
-                    System.out.println("  -h, --help       Show this help message");
-                    System.out.println("  --version        Print the version then exit");
-                    System.out.println("  -c, --config     Set the configuration file location");
-                    System.out.println("  -v               Increase log level (log more info)");
-                    System.out.println("  -vv              Further increase log level");
-                    System.out.println(" ");
-                    System.exit(0);
-                } else if (StringUtils.equals(arg, "-v")) {
-                    System.setProperty("org.slf4j.simpleLogger.log.io.kamax.mxisd", "debug");
-                } else if (StringUtils.equals(arg, "-vv")) {
-                    System.setProperty("org.slf4j.simpleLogger.log.io.kamax.mxisd", "trace");
-                } else if (StringUtils.equalsAny(arg, "-c", "--config")) {
-                    String cfgFile = argsIt.next();
-                    cfg = YamlConfigLoader.loadFromFile(cfgFile);
-                } else if (StringUtils.equals("--version", arg)) {
-                    System.out.println(Mxisd.Version);
-                    System.exit(0);
-                } else {
-                    System.err.println("Invalid argument: " + arg);
-                    System.err.println("Try '--help' for available arguments");
-                    System.exit(1);
+                switch (arg) {
+                    case "-h":
+                    case "--help":
+                    case "-?":
+                    case "--usage":
+                        System.out.println("Available arguments:" + System.lineSeparator());
+                        System.out.println("  -h, --help       Show this help message");
+                        System.out.println("  --version        Print the version then exit");
+                        System.out.println("  -c, --config     Set the configuration file location");
+                        System.out.println("  -v               Increase log level (log more info)");
+                        System.out.println("  -vv              Further increase log level");
+                        System.out.println("  --dump           Dump the full ma1sd configuration");
+                        System.out.println(" ");
+                        System.exit(0);
+                        return;
+                    case "-v":
+                        System.setProperty("org.slf4j.simpleLogger.log.io.kamax.mxisd", "debug");
+                        break;
+                    case "-vv":
+                        System.setProperty("org.slf4j.simpleLogger.log.io.kamax.mxisd", "trace");
+                        break;
+                    case "-c":
+                    case "--config":
+                        String cfgFile = argsIt.next();
+                        cfg = YamlConfigLoader.loadFromFile(cfgFile);
+                        break;
+                    case "--dump":
+                        dump = true;
+                        break;
+                    default:
+                        System.err.println("Invalid argument: " + arg);
+                        System.err.println("Try '--help' for available arguments");
+                        System.exit(1);
                 }
             }
 
             if (Objects.isNull(cfg)) {
                 cfg = YamlConfigLoader.tryLoadFromFile("ma1sd.yaml").orElseGet(MxisdConfig::new);
+            }
+
+            if (dump) {
+                YamlConfigLoader.dumpConfig(cfg);
+                System.exit(0);
             }
 
             log.info("ma1sd starting");

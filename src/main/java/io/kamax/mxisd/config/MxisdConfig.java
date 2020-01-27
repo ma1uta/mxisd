@@ -117,6 +117,7 @@ public class MxisdConfig {
     private WordpressConfig wordpress = new WordpressConfig();
     private PolicyConfig policy = new PolicyConfig();
     private HashingConfig hashing = new HashingConfig();
+    private LoggingConfig logging = new LoggingConfig();
 
     public AppServiceConfig getAppsvc() {
         return appsvc;
@@ -342,6 +343,14 @@ public class MxisdConfig {
         this.hashing = hashing;
     }
 
+    public LoggingConfig getLogging() {
+        return logging;
+    }
+
+    public void setLogging(LoggingConfig logging) {
+        this.logging = logging;
+    }
+
     public MxisdConfig inMemory() {
         getKey().setPath(":memory:");
         getStorage().getProvider().getSqlite().setDatabase(":memory:");
@@ -350,6 +359,8 @@ public class MxisdConfig {
     }
 
     public MxisdConfig build() {
+        getLogging().build();
+
         if (StringUtils.isBlank(getServer().getName())) {
             getServer().setName(getMatrix().getDomain());
             log.debug("server.name is empty, using matrix.domain");

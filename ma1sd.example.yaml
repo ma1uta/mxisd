@@ -130,6 +130,7 @@ threepid:
 # synapseSql:
 #   lookup:
 #     query: 'select user_id as mxid, medium, address from user_threepids' # query for retrive 3PIDs for hashes.
+#   legacyRoomNames: false  # use the old query to get room names.
 
 ### hash lookup for ldap provider (with example of the ldap configuration)
 # ldap:
@@ -167,3 +168,6 @@ threepid:
 #        - '/_matrix/identity/v2/hash_details'
 #        - '/_matrix/identity/v2/lookup'
 #
+
+# logging:
+#   root: trace   # logging level

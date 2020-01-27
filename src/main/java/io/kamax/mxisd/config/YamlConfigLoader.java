@@ -76,4 +76,14 @@ public class YamlConfigLoader {
         }
     }
 
+    public static void dumpConfig(MxisdConfig cfg) {
+        Representer rep = new Representer();
+        rep.getPropertyUtils().setBeanAccess(BeanAccess.FIELD);
+        rep.getPropertyUtils().setAllowReadOnlyProperties(true);
+        rep.getPropertyUtils().setSkipMissingProperties(true);
+
+        Yaml yaml = new Yaml(new Constructor(MxisdConfig.class), rep);
+        String dump = yaml.dump(cfg);
+        log.info("Full configuration:\n{}", dump);
+    }
 }

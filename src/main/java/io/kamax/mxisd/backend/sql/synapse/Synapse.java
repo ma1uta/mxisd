@@ -29,23 +29,27 @@ import java.util.Optional;
 
 public class Synapse {
 
-    private SqlConnectionPool pool;
+    private final SqlConnectionPool pool;
+    private final SynapseSqlProviderConfig providerConfig;
 
     public Synapse(SynapseSqlProviderConfig sqlCfg) {
         this.pool = new SqlConnectionPool(sqlCfg);
+        providerConfig = sqlCfg;
     }
 
     public Optional<String> getRoomName(String id) {
-        return pool.withConnFunction(conn -> {
-            PreparedStatement stmt = conn.prepareStatement(SynapseQueries.getRoomName());
-            stmt.setString(1, id);
-            ResultSet rSet = stmt.executeQuery();
-            if (!rSet.next()) {
-                return Optional.empty();
-            }
+        String query = providerConfig.isLegacyRoomNames() ? SynapseQueries.getLegacyRoomName() : SynapseQueries.getRoomName();
 
-            return Optional.ofNullable(rSet.getString(1));
+        return pool.withConnFunction(conn -> {
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, id);
+                ResultSet rSet = stmt.executeQuery();
+                if (!rSet.next()) {
+                    return Optional.empty();
+                }
+
+                return Optional.ofNullable(rSet.getString(1));
+            }
         });
     }
-
 }

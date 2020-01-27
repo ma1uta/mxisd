@@ -72,7 +72,10 @@ public class SynapseQueries {
     }
 
     public static String getRoomName() {
-        return "select r.name from room_names r, events e, (select r1.room_id,max(e1.origin_server_ts) ts from room_names r1, events e1 where r1.event_id = e1.event_id group by r1.room_id) rle where e.origin_server_ts = rle.ts and r.event_id = e.event_id and r.room_id = ?";
+        return "select name from room_stats_state where room_id = ? limit 1";
     }
 
+    public static String getLegacyRoomName() {
+        return "select r.name from room_names r, events e, (select r1.room_id,max(e1.origin_server_ts) ts from room_names r1, events e1 where r1.event_id = e1.event_id group by r1.room_id) rle where e.origin_server_ts = rle.ts and r.event_id = e.event_id and r.room_id = ?";
+    }
 }

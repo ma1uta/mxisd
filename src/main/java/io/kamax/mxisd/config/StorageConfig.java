@@ -21,13 +21,20 @@
 package io.kamax.mxisd.config;
 
 import io.kamax.mxisd.exception.ConfigurationException;
-import org.apache.commons.lang.StringUtils;
 
 public class StorageConfig {
+
+    public enum BackendEnum {
+        sqlite,
+
+        postgresql
+    }
 
     public static class Provider {
 
         private SQLiteStorageConfig sqlite = new SQLiteStorageConfig();
+
+        private PostgresqlStorageConfig postgresql = new PostgresqlStorageConfig();
 
         public SQLiteStorageConfig getSqlite() {
             return sqlite;
@@ -37,16 +44,23 @@ public class StorageConfig {
             this.sqlite = sqlite;
         }
 
+        public PostgresqlStorageConfig getPostgresql() {
+            return postgresql;
+        }
+
+        public void setPostgresql(PostgresqlStorageConfig postgresql) {
+            this.postgresql = postgresql;
+        }
     }
 
-    private String backend = "sqlite";
+    private BackendEnum backend = BackendEnum.sqlite; // or postgresql
     private Provider provider = new Provider();
 
-    public String getBackend() {
+    public BackendEnum getBackend() {
         return backend;
     }
 
-    public void setBackend(String backend) {
+    public void setBackend(BackendEnum backend) {
         this.backend = backend;
     }
 
@@ -59,7 +73,7 @@ public class StorageConfig {
     }
 
     public void build() {
-        if (StringUtils.isBlank(getBackend())) {
+        if (getBackend() == null) {
             throw new ConfigurationException("storage.backend");
         }
     }

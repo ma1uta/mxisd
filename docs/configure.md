@@ -58,7 +58,47 @@ Commonly the `server.publicUrl` should be the same value as the `trusted_third_p
 
 ## Storage
 ### SQLite
-`storage.provider.sqlite.database`: Absolute location of the SQLite database
+```yaml
+storage:
+  backend: sqlite # default
+  provider:
+    sqlite:
+      database: /var/lib/ma1sd/store.db #  Absolute location of the SQLite database
+```
+
+### Postgresql
+```yaml
+storage:
+  backend: postgresql
+  provider:
+    postgresql:
+      database: //localhost:5432/ma1sd
+      username: ma1sd
+      password: secret_password
+```
+See [the migration instruction](migration-to-postgresql.md) from sqlite to postgresql
+
+
+## Logging
+```yaml
+logging:
+  root: error  # default level for all loggers (apps and thirdparty libraries)
+  app: info    # log level only for the ma1sd
+```
+
+Possible value: `trace`, `debug`, `info`, `warn`, `error`, `off`.
+
+Default value for root level: `info`.
+
+Value for app level can be specified via `MA1SD_LOG_LEVEL` environment variable, configuration or start options.
+
+Default value for app level: `info`.
+
+| start option | equivalent configuration |
+| --- | --- |
+|  | app: info |
+| -v | app: debug |
+| -vv | app: trace |
 
 ## Identity stores
 See the [Identity stores](stores/README.md) for specific configuration

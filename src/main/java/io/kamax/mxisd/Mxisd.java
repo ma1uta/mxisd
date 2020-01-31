@@ -27,6 +27,8 @@ import io.kamax.mxisd.auth.AuthProviders;
 import io.kamax.mxisd.backend.IdentityStoreSupplier;
 import io.kamax.mxisd.backend.sql.synapse.Synapse;
 import io.kamax.mxisd.config.MxisdConfig;
+import io.kamax.mxisd.config.PostgresqlStorageConfig;
+import io.kamax.mxisd.config.StorageConfig;
 import io.kamax.mxisd.crypto.CryptoFactory;
 import io.kamax.mxisd.crypto.KeyManager;
 import io.kamax.mxisd.crypto.SignatureManager;
@@ -109,7 +111,20 @@ public class Mxisd {
         IdentityServerUtils.setHttpClient(httpClient);
         srvFetcher = new RemoteIdentityServerFetcher(httpClient);
 
-        store = new OrmLiteSqlStorage(cfg);
+        StorageConfig.BackendEnum storageBackend = cfg.getStorage().getBackend();
+        StorageConfig.Provider storageProvider = cfg.getStorage().getProvider();
+        switch (storageBackend) {
+            case sqlite:
+                store = new OrmLiteSqlStorage(storageBackend, storageProvider.getSqlite().getDatabase());
+                break;
+            case postgresql:
+                PostgresqlStorageConfig postgresql = storageProvider.getPostgresql();
+                store = new OrmLiteSqlStorage(storageBackend, postgresql.getDatabase(), postgresql.getUsername(), postgresql.getPassword());
+                break;
+            default:
+                throw new IllegalStateException("Storage provider hasn't been configured");
+        }
+
         keyMgr = CryptoFactory.getKeyManager(cfg.getKey());
         signMgr = CryptoFactory.getSignatureManager(cfg, keyMgr);
         clientDns = new ClientDnsOverwrite(cfg.getDns().getOverwrite());

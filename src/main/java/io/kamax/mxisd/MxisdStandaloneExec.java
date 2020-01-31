@@ -45,6 +45,7 @@ public class MxisdStandaloneExec {
             MxisdConfig cfg = null;
             Iterator<String> argsIt = Arrays.asList(args).iterator();
             boolean dump = false;
+            boolean exit = false;
             while (argsIt.hasNext()) {
                 String arg = argsIt.next();
                 switch (arg) {
@@ -59,6 +60,7 @@ public class MxisdStandaloneExec {
                         System.out.println("  -v               Increase log level (log more info)");
                         System.out.println("  -vv              Further increase log level");
                         System.out.println("  --dump           Dump the full ma1sd configuration");
+                        System.out.println("  --dump-and-exit  Dump the full ma1sd configuration and exit");
                         System.out.println(" ");
                         System.exit(0);
                         return;
@@ -73,6 +75,8 @@ public class MxisdStandaloneExec {
                         String cfgFile = argsIt.next();
                         cfg = YamlConfigLoader.loadFromFile(cfgFile);
                         break;
+                    case "--dump-and-exit":
+                        exit = true;
                     case "--dump":
                         dump = true;
                         break;
@@ -89,7 +93,9 @@ public class MxisdStandaloneExec {
 
             if (dump) {
                 YamlConfigLoader.dumpConfig(cfg);
-                System.exit(0);
+                if (exit) {
+                    System.exit(0);
+                }
             }
 
             log.info("ma1sd starting");

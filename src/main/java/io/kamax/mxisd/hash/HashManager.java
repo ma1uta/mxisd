@@ -1,6 +1,9 @@
 package io.kamax.mxisd.hash;
 
 import io.kamax.mxisd.config.HashingConfig;
+import io.kamax.mxisd.hash.engine.Engine;
+import io.kamax.mxisd.hash.engine.HashEngine;
+import io.kamax.mxisd.hash.engine.NoneEngine;
 import io.kamax.mxisd.hash.rotation.HashRotationStrategy;
 import io.kamax.mxisd.hash.rotation.NoOpRotationStrategy;
 import io.kamax.mxisd.hash.rotation.RotationPerRequests;
@@ -21,7 +24,7 @@ public class HashManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HashManager.class);
 
-    private HashEngine hashEngine;
+    private Engine engine;
     private HashRotationStrategy rotationStrategy;
     private HashStorage hashStorage;
     private HashingConfig config;
@@ -32,7 +35,7 @@ public class HashManager {
         this.config = config;
         this.storage = storage;
         initStorage();
-        hashEngine = new HashEngine(providers, getHashStorage(), config);
+        engine = config.isEnabled() ? new HashEngine(providers, getHashStorage(), config) : new NoneEngine();
         initRotationStrategy();
         configured.set(true);
     }
@@ -73,8 +76,8 @@ public class HashManager {
         this.rotationStrategy.register(getHashEngine());
     }
 
-    public HashEngine getHashEngine() {
-        return hashEngine;
+    public Engine getHashEngine() {
+        return engine;
     }
 
     public HashRotationStrategy getRotationStrategy() {

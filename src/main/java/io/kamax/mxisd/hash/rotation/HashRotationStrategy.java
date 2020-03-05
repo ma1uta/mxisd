@@ -1,12 +1,12 @@
 package io.kamax.mxisd.hash.rotation;
 
-import io.kamax.mxisd.hash.HashEngine;
+import io.kamax.mxisd.hash.engine.Engine;
 
 public interface HashRotationStrategy {
 
-    void register(HashEngine hashEngine);
+    void register(Engine engine);
 
-    HashEngine getHashEngine();
+    Engine getHashEngine();
 
     void newRequest();
 

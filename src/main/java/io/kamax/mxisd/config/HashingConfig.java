@@ -19,7 +19,7 @@ public class HashingConfig {
     private int requests = 10;
     private List<Algorithm> algorithms = new ArrayList<>();
 
-    public void build() {
+    public void build(MatrixConfig matrixConfig) {
         if (isEnabled()) {
             LOGGER.info("--- Hash configuration ---");
             LOGGER.info("   Pepper length: {}", getPepperLength());
@@ -35,6 +35,9 @@ public class HashingConfig {
             }
             LOGGER.info("   Algorithms: {}", getAlgorithms());
         } else {
+            if (matrixConfig.isV2()) {
+                LOGGER.warn("V2 enabled without the hash configuration.");
+            }
             LOGGER.info("Hash configuration disabled, used only `none` pepper.");
         }
     }

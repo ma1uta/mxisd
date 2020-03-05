@@ -1,19 +1,19 @@
 package io.kamax.mxisd.hash.rotation;
 
-import io.kamax.mxisd.hash.HashEngine;
+import io.kamax.mxisd.hash.engine.Engine;
 
 public class NoOpRotationStrategy implements HashRotationStrategy {
 
-    private HashEngine hashEngine;
+    private Engine engine;
 
     @Override
-    public void register(HashEngine hashEngine) {
-        this.hashEngine = hashEngine;
+    public void register(Engine engine) {
+        this.engine = engine;
     }
 
     @Override
-    public HashEngine getHashEngine() {
-        return hashEngine;
+    public Engine getHashEngine() {
+        return engine;
     }
 
     @Override

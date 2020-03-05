@@ -31,6 +31,8 @@ public class HashDetailsHandler extends BasicHttpHandler {
             for (HashingConfig.Algorithm algorithm : config.getAlgorithms()) {
                 algorithms.add(algorithm.name().toLowerCase());
             }
+        } else {
+            algorithms.add(HashingConfig.Algorithm.none.name().toLowerCase());
         }
         response.add("algorithms", algorithms);
         return response;

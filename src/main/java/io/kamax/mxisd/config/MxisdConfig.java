@@ -393,7 +393,7 @@ public class MxisdConfig {
         getView().build();
         getWordpress().build();
         getPolicy().build();
-        getHashing().build();
+        getHashing().build(getMatrix());
 
         return this;
     }

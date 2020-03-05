@@ -67,10 +67,6 @@ public class HashLookupHandler extends LookupHandler implements ApiHandler {
         log.info("Got bulk lookup request from {} with client {} - Is recursive? {}",
             lookupRequest.getRequester(), lookupRequest.getUserAgent(), lookupRequest.isRecursive());
 
-        if (!hashManager.getConfig().isEnabled()) {
-            throw new InvalidParamException();
-        }
-
         if (!hashManager.getHashEngine().getPepper().equals(input.getPepper())) {
             throw new InvalidPepperException();
         }
@@ -89,7 +85,7 @@ public class HashLookupHandler extends LookupHandler implements ApiHandler {
     }
 
     private void noneAlgorithm(HttpServerExchange exchange, HashLookupRequest request, ClientHashLookupRequest input) throws Exception {
-        if (!hashManager.getConfig().getAlgorithms().contains(HashingConfig.Algorithm.none)) {
+        if (hashManager.getConfig().isEnabled() && !hashManager.getConfig().getAlgorithms().contains(HashingConfig.Algorithm.none)) {
             throw new InvalidParamException();
         }
 

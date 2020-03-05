@@ -1,4 +1,4 @@
-package io.kamax.mxisd.hash;
+package io.kamax.mxisd.hash.engine;
 
 import io.kamax.mxisd.config.HashingConfig;
 import io.kamax.mxisd.hash.storage.HashStorage;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Base64;
 import java.util.List;
 
-public class HashEngine {
+public class HashEngine implements Engine {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HashEngine.class);
 
@@ -28,6 +28,7 @@ public class HashEngine {
         this.config = config;
     }
 
+    @Override
     public void updateHashes() {
         LOGGER.info("Start update hashes.");
         synchronized (hashStorage) {
@@ -48,6 +49,7 @@ public class HashEngine {
         LOGGER.info("Finish update hashes.");
     }
 
+    @Override
     public String getPepper() {
         synchronized (hashStorage) {
             return pepper;

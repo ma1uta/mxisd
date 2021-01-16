@@ -287,7 +287,7 @@ public class InvitationManager {
         }
 
         String token = RandomStringUtils.randomAlphanumeric(64);
-        String displayName = invitation.getAddress().substring(0, 3) + "...";
+        String displayName = invitation.getAddress();
         KeyIdentifier pKeyId = keyMgr.getServerSigningKey().getId();
         KeyIdentifier eKeyId = keyMgr.generateKey(KeyType.Ephemeral);
 

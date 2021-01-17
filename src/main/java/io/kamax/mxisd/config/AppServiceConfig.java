@@ -34,7 +34,7 @@ public class AppServiceConfig {
     public static class Users {
 
         private String main = "mxisd";
-        private String inviteExpired = "_einladung_abgelaufen";
+        private String inviteExpired = "_einladung_abgelaufen_";
 
         public String getMain() {
             return main;

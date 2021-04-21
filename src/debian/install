@@ -1,0 +1,3 @@
+ma1sd.example.yaml etc/ma1sd
+src/systemd/ma1sd.service etc/systemd/system
+build/libs/ma1sd.jar usr/lib/ma1sd

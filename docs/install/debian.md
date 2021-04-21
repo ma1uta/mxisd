@@ -1,6 +1,6 @@
 # Debian package
 ## Requirements
-- Any distribution that supports Java 8
+- Any distribution that supports Java 11 or Java 8
 
 ## Install
 1. Download the [latest release](https://github.com/ma1uta/ma1sd/releases/latest)

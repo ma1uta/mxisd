@@ -44,6 +44,7 @@ Create a list under the label `myOtherServers` containing two Identity servers: 
 - `server.name`: Public hostname of ma1sd, if different from the Matrix domain.
 - `server.port`: HTTP port to listen on (unencrypted)
 - `server.publicUrl`: Defaults to `https://{server.name}`
+- `server.hostname`: Set hostname to listen on.  Defaults to 0.0.0.0.
 
 ## Unbind (MSC1915)
 - `session.policy.unbind.enabled`: Enable or disable unbind functionality (MSC1915). (Defaults to true).

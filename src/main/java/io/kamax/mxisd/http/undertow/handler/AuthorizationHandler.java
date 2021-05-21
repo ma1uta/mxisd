@@ -53,18 +53,20 @@ public class AuthorizationHandler extends BasicHttpHandler {
             throw new InvalidCredentialsException();
         }
 
-        AccountDao account = accountManager.findAccount(token);
-        if (account == null) {
-            log.error("Account not found from request from: {}", exchange.getHostAndPort());
-            throw new InvalidCredentialsException();
+        synchronized (accountManager) {
+            AccountDao account = accountManager.findAccount(token);
+            if (account == null) {
+                log.error("Account not found from request from: {}", exchange.getHostAndPort());
+                throw new InvalidCredentialsException();
+            }
+            long expiredAt = (account.getCreatedAt() + account.getExpiresIn()) * 1000; // expired in milliseconds
+            if (expiredAt < System.currentTimeMillis()) {
+                log.error("Account for '{}' from: {}", account.getUserId(), exchange.getHostAndPort());
+                accountManager.deleteAccount(token);
+                throw new InvalidCredentialsException();
+            }
+            log.trace("Access for '{}' allowed", account.getUserId());
         }
-        long expiredAt = (account.getCreatedAt() + account.getExpiresIn()) * 1000; // expired in milliseconds
-        if (expiredAt < System.currentTimeMillis()) {
-            log.error("Account for '{}' from: {}", account.getUserId(), exchange.getHostAndPort());
-            accountManager.deleteAccount(token);
-            throw new InvalidCredentialsException();
-        }
-        log.trace("Access for '{}' allowed", account.getUserId());
         child.handleRequest(exchange);
     }
 }

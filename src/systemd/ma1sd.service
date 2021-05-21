@@ -4,7 +4,8 @@ After=syslog.target
 
 [Service]
 User=ma1sd
-ExecStart=/usr/bin/ma1sd -c /etc/ma1sd/ma1sd.yaml
+Group=matrix-synapse
+ExecStart=/bin/sh -c 'exec /usr/bin/ma1sd -v -c /etc/ma1sd/ma1sd.yaml >>/var/log/matrix-synapse/ma1sd.log 2>&1'
 
 [Install]
 WantedBy=multi-user.target

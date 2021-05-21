@@ -3,6 +3,16 @@
 # Add service account
 useradd -r ma1sd || true
 
+groupadd -f matrix-synapse
+usermod -a -G matrix-synapse ma1sd
+
+if [ ! -d /var/log/matrix-synapse ]; then
+  mkdir -p /var/log/matrix-synapse
+  chgrp matrix-synapse /var/log/matrix-synapse
+  chmod g+w /var/log/matrix-synapse
+fi
+
+
 # Set permissions for data directory
 chown -R ma1sd:ma1sd %DEB_DATA_DIR%
 

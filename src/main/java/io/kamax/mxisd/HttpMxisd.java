@@ -67,6 +67,7 @@ import io.kamax.mxisd.http.undertow.handler.status.StatusHandler;
 import io.kamax.mxisd.http.undertow.handler.status.VersionHandler;
 import io.kamax.mxisd.http.undertow.handler.term.v2.AcceptTermsHandler;
 import io.kamax.mxisd.http.undertow.handler.term.v2.GetTermsHandler;
+import io.kamax.mxisd.http.undertow.handler.versions.VersionsHandler;
 import io.kamax.mxisd.matrix.IdentityServiceAPI;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
@@ -140,6 +141,9 @@ public class HttpMxisd {
             .get("/users/{" + AsUserHandler.ID + "}", asUserHandler) // Legacy endpoint
             .get("/rooms/**", asNotFoundHandler) // Legacy endpoint
             .put("/transactions/{" + AsTransactionHandler.ID + "}", asTxnHandler) // Legacy endpoint
+
+            // Versions Endpoint
+            .get(VersionsHandler.Path, sane(new VersionsHandler()))
 
             // Banned endpoints
             .get(InternalInfoHandler.Path, sane(new InternalInfoHandler()));

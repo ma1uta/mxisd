@@ -55,6 +55,8 @@ public class GoogleFirebaseBackend {
             log.info("Google Firebase Authentication is ready");
         } catch (IOException e) {
             throw new RuntimeException("Error when initializing Firebase", e);
+        } catch (IllegalStateException e){
+            fbAuth = FirebaseAuth.getInstance(FirebaseApp.getInstance(name));
         }
     }
 

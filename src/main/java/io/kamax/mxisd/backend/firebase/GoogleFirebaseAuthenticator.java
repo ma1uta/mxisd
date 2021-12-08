@@ -109,7 +109,7 @@ public class GoogleFirebaseAuthenticator extends GoogleFirebaseBackend implement
         CountDownLatch l = new CountDownLatch(1);
         getFirebase().verifyIdToken(password).addOnSuccessListener(token -> {
             try {
-                if (!StringUtils.equals(localpart, token.getUid())) {
+                if (!StringUtils.equals(localpart, token.getUid().toLowerCase())) {
                     log.info("Failure to authenticate {}: Matrix ID localpart '{}' does not match Firebase UID '{}'", mxid, localpart, token.getUid());
                     result.fail();
                     return;

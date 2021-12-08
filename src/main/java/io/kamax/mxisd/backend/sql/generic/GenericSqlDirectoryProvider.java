@@ -65,6 +65,7 @@ public class GenericSqlDirectoryProvider implements DirectoryProvider {
         Result item = new Result();
         item.setUserId(rSet.getString(1));
         item.setDisplayName(rSet.getString(2));
+        item.setAvatarUrl(rSet.getString(3));
         return Optional.of(item);
     }
 

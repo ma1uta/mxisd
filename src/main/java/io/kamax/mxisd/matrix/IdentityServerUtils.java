@@ -108,13 +108,13 @@ public class IdentityServerUtils {
             log.info("Lookup name: {}", lookupDns);
 
             List<SRVRecord> srvRecords = new ArrayList<>();
-            Record[] records = new Lookup(lookupDns, Type.SRV).run();
+            org.xbill.DNS.Record[] records = new Lookup(lookupDns, Type.SRV).run();
             if (records == null || records.length == 0) {
                 log.info("No SRV record for {}", lookupDns);
                 return Optional.empty();
             }
 
-            for (Record record : records) {
+            for (org.xbill.DNS.Record record : records) {
                 log.info("Record: {}", record.toString());
                 if (record.getType() == Type.SRV) {
                     if (record instanceof SRVRecord) {

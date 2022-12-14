@@ -143,13 +143,13 @@ public class HomeserverFederationResolver {
 
         try {
             List<SRVRecord> srvRecords = new ArrayList<>();
-            Record[] rawRecords = new Lookup(lookupDns, Type.SRV).run();
+            org.xbill.DNS.Record[] rawRecords = new Lookup(lookupDns, Type.SRV).run();
             if (Objects.isNull(rawRecords) || rawRecords.length == 0) {
                 log.debug("No SRV record for {}", domain);
                 return Optional.empty();
             }
 
-            for (Record record : rawRecords) {
+            for (org.xbill.DNS.Record record : rawRecords) {
                 if (Type.SRV == record.getType()) {
                     srvRecords.add((SRVRecord) record);
                 } else {

@@ -61,7 +61,7 @@ public class PhoneSmsTwilioConnector implements PhoneConnector {
         recipient = "+" + recipient;
         log.info("Sending SMS notification from {} to {} with {} characters", cfg.getNumber(), recipient, content.length());
         try {
-            Message.creator(new PhoneNumber("+" + recipient), new PhoneNumber(cfg.getNumber()), content).create();
+            Message.creator(new PhoneNumber(recipient), new PhoneNumber(cfg.getNumber()), content).create();
         } catch (ApiException e) {
             throw new InternalServerError(e);
         }
